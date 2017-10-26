@@ -1,6 +1,7 @@
 import requests
 import re
 import random
+import configparser
 import urllib.request
 from bs4 import BeautifulSoup
 from flask import Flask, request, abort
@@ -53,6 +54,26 @@ def pattern_mega(text):
     for pattern in patterns:
         if re.search(pattern, text, re.IGNORECASE):
             return True
+        
+def ask():
+    url = "http://wisdomer2002.pixnet.net/blog/post/224560-%E5%AA%BD%E7%A5%96%E7%B1%A4%E8%A9%A960%E9%A6%96"
+    request = requests.get(url)
+    ytcontent = request.content
+    soup = BeautifulSoup(ytcontent, "html.parser")
+
+    content = ""
+
+    alist = soup.select("div.article-content li a" )
+    random.shuffle(alist)
+    askdata = alist[0]
+
+                                    
+    url=askdata.get("href")
+    text=askdata.get_text()
+
+    content = '{}\n詳解:{}\n\n'.format(text,url)
+    
+    return content
 
 
 @handler.add(MessageEvent, message=TextMessage)
@@ -71,6 +92,13 @@ def handle_message(event):
             preview_image_url=url
         )
         line_bot_api.reply_message(event.reply_token, image_message)
+        return 0
+    
+    if event.message.text == "抽籤":
+        content = ask()
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=content))
         return 0
     
 if __name__ == '__main__':
