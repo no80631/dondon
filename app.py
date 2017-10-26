@@ -45,6 +45,15 @@ def callback():
 
     return 'ok'
 
+def pattern_mega(text):
+    patterns = [
+        'mega', 'mg', 'mu', 'ＭＥＧＡ', 'ＭＥ', 'ＭＵ',
+        'ｍｅ', 'ｍｕ', 'ｍｅｇａ', 'GD', 'MG', 'google',
+    ]
+    for pattern in patterns:
+        if re.search(pattern, text, re.IGNORECASE):
+            return True
+
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -61,9 +70,9 @@ def handle_message(event):
             original_content_url=url,
             preview_image_url=url
         )
-        line_bot_api.reply_message(
-            event.reply_token, image_message)
+        line_bot_api.reply_message(event.reply_token, image_message)
         return 0
- if __name__ == '__main__':
+    
+if __name__ == '__main__':
     app.run()
 
