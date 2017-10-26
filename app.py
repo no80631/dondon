@@ -84,7 +84,7 @@ def handle_message(event):
 
     if event.message.text == "抽":
         client = ImgurClient('e42cc11418f9001', 'cd8239b7a2bd0f55161e8b1124cdc6bdb3fd8b06')
-        images = client.get_album_images('Ya0RbuE')
+        images = client.get_album_images('N4uqH')
         index = random.randint(0, len(images) - 1)
         url = images[index].link
         image_message = ImageSendMessage(
